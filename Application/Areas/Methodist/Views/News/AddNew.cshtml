@@ -1,0 +1,27 @@
+﻿@model NewsBlock
+
+<form asp-area="Methodist" asp-controller="News" asp-action="SaveNew" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CreateDate" />
+    <div asp-validation-summary="All"></div>
+    <div class="div-box">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="div-box">
+        <label asp-for="Subtitle"></label>
+        <input asp-for="Subtitle" />
+        <span asp-validation-for="Subtitle"></span>
+    </div>
+    <hr>
+
+    @* IMAGE *@
+
+    <div class="div-box">
+        <label asp-for="Text"></label>
+        <input asp-for="Text" />
+        <span asp-validation-for="Text"></span>
+    </div>
+    <input type="submit" value="Сохранить" />
+</form>

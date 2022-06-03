@@ -1,0 +1,76 @@
+﻿@model ScheduleViewModel
+@if (Startup.IsMethodistModeNow)
+{
+    <div class="row">
+        <form asp-area="Methodist" asp-controller="Schedule" asp-action="AddScheduleBlock" method="post">
+            <button type="submit">Додати блок</button>
+        </form>
+        <form asp-area="Methodist" asp-controller="Schedule" method="post">
+            <select name="blockID" asp-items="Model.AllSheduleBlocks"></select>
+            <button asp-action="EditScheduleBlock" type="submit">Редагувати</button>
+            <input type="hidden" name="dateToBack" value="@Model.CurrentDateTime" />
+            <button asp-action="DeleteScheduleBlock" type="submit">Видалити</button>
+        </form>
+    </div>
+}
+<div>
+    <form asp-area="" asp-controller="Schedule" asp-action="Schedule" method="post">
+        <input asp-for="CurrentDateTime">
+        <span asp-validation-for="CurrentDateTime"></span>
+        <button type="submit">Відкрити</button>
+    </form>
+</div>
+<div style="
+        margin: 4px, 4px;
+        padding: 4px;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+    ">
+    <h1>
+        @Model.Test
+    </h1>
+    <table>
+        <tr>
+            <th>
+                Розклад
+            </th>
+        </tr>
+        @for (int i = 0; i < 8; i++)
+        {
+            <tr>
+                <td>
+                    @(i + 1)
+                </td>
+                @for (int j = 0; j < Model.CurrentSchedules.Length; j++)
+                {
+                    @if (Model.CurrentSchedules[j].Couple == i)
+                    {
+                        <td>
+                            <div>
+                                <table>
+                                    <tr>@Model.CurrentSchedules[j].Block.Title</tr>
+                                    <tr>@Model.CurrentSchedules[j].Block.Audience</tr>
+                                    <tr>@Model.CurrentSchedules[j].Block.Teacher</tr>
+                                    <tr>@Model.CurrentSchedules[j].Block.Group</tr>
+                                </table>
+                            </div>
+                        </td>
+                    }
+                }
+                @if (Startup.IsMethodistModeNow)
+                {
+                    <td>
+                        <form asp-area="Methodist" asp-controller="Schedule" asp-action="AddParaInSchedule">
+                            <select name="paraID" asp-items="Model.AllSheduleBlocks"></select>
+                            <input type="hidden" name="paraNumber" value="@i" />
+                            <input type="hidden" name="data" value="@Model.CurrentDateTime" />
+                            <button type="submit">Додати та зберегти</button>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+</div>

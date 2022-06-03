@@ -1,0 +1,28 @@
+﻿@model IQueryable<NewsBlock>
+@if (Startup.IsMethodistModeNow)
+{
+    <form asp-area="Methodist" asp-controller="News" asp-action="AddNew" method="post">
+        <button type="submit">Додати новину</button>
+    </form>
+}
+@foreach (NewsBlock news in Model)
+{
+    <form asp-area="" asp-controller="News" asp-action="New" asp-route-id="@news.Id" method="post">
+        <h6>@news.CreateDate.ToLongDateString()</h6>
+        <h2>@news.Title</h2>
+        @news.Subtitle
+        <br><button type="submit">Відкрити</button>
+    </form>
+    @if (Startup.IsMethodistModeNow)
+    {
+        <div class="row">
+            <form asp-area="Methodist" asp-controller="News" asp-action="EditNew" asp-route-newID="@news.Id" method="post">
+                <button type="submit">Редагувати</button>
+            </form>
+            <form asp-area="Methodist" asp-controller="News" asp-action="DeleteNew" asp-route-needBlockID="@news.Id" method="post">
+                <button type="submit">Видалити</button>
+            </form>
+        </div>
+    }
+    <hr>
+}

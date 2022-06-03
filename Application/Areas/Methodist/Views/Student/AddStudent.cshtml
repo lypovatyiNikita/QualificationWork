@@ -1,0 +1,25 @@
+﻿@model Student
+
+<form asp-area="Methodist" asp-controller="Student" asp-action="Save" method="post">
+    <input type="hidden" asp-for="Id"/>
+    <input type="hidden" asp-for="StudentId"/>
+    <div asp-validation-summary="All"></div>
+    <div class="div-box">
+        <label asp-for="StudentUser.UserName"></label>
+        <input asp-for="StudentUser.UserName" />
+    </div>
+    <div class="div-box">
+        <label>Новий Пароль</label>
+        <input type="text" name="password" />
+    </div>
+    <div class="div-box">
+        <label asp-for="StudentUser.Name"></label>
+        <input asp-for="StudentUser.Name" />
+    </div>
+    <div class="div-box">
+        <label asp-for="StudentUser.Surname"></label>
+        <input asp-for="StudentUser.Surname" />
+    </div>
+    <select name="groupId" asp-items="ViewBag.Groups"></select>
+    <input type="submit" value="Зберегти" />
+</form>

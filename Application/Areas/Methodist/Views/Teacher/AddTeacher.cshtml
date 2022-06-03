@@ -1,0 +1,25 @@
+﻿@model Application.Areas.Methodist.Model.TeacherModel
+
+<form asp-area="Methodist" asp-controller="Teacher" asp-action="Save" method="post">
+    <input type="hidden" asp-for="Teacher.Id" />
+    <input type="hidden" asp-for="Teacher.TeacherId" />
+    <div asp-validation-summary="All"></div>
+    <div class="div-box">
+        <label asp-for="Teacher.TeacherUser.UserName"></label>
+        <input asp-for="Teacher.TeacherUser.UserName" />
+    </div>
+    <div class="div-box">
+        <label>Новий Пароль</label>
+        <input type="text" name="password" />
+    </div>
+    <div class="div-box">
+        <label asp-for="Teacher.TeacherUser.Name"></label>
+        <input asp-for="Teacher.TeacherUser.Name" />
+    </div>
+    <div class="div-box">
+        <label asp-for="Teacher.TeacherUser.Surname"></label>
+        <input asp-for="Teacher.TeacherUser.Surname" />
+    </div>
+    @Html.ListBoxFor(x => x.Subjects, Model.SubjectsSelect, new { style = "width:200px" })
+    <input type="submit" value="Зберегти" />
+</form>

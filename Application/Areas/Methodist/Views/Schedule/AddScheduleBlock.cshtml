@@ -1,0 +1,27 @@
+﻿@model ScheduleBlock
+
+<form asp-area="Methodist" asp-controller="Schedule" asp-action="SaveScheduleBlock" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All"></div>
+    <div class="div-box">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+    <div class="div-box">
+        <label asp-for="Teacher"></label>
+        <input asp-for="Teacher" />
+        <span asp-validation-for="Teacher"></span>
+    </div>
+    <div class="div-box">
+        <label asp-for="Audience"></label>
+        <input asp-for="Audience" />
+        <span asp-validation-for="Audience"></span>
+    </div>
+    <div class="div-box">
+        <label asp-for="Group"></label>
+        <input asp-for="Group" />
+        <span asp-validation-for="Group"></span>
+    </div>
+    <input type="submit" value="Сохранить" />
+</form>

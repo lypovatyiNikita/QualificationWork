@@ -1,0 +1,25 @@
+﻿@model IQueryable<StudentsEstimates>
+
+    <div >
+        <table>
+            <tr>
+                <th>
+                    Предмет
+                </th>
+                <th>
+                    Оцінка
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Subject.Name
+                    </td>
+                    <td>
+                        @item.Estimate
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>

@@ -1,0 +1,30 @@
+﻿<!-- Nav -->
+<nav id="nav">
+    <ul>
+        <li><a href="/news">Новини</a></li>
+        <li><a href="/schedule">Розклад</a></li>
+        <li><a href="/studyingGraph">Графік навчання</a></li>
+        <li><a href="/">Головна</a></li>
+        @if (User.IsInRole(AllRoles.StudentRole))
+        {
+            <li><a href="/student/Statement/Statement">Відомість</a></li>
+        }
+        else if (User.IsInRole(AllRoles.TeacherRole))
+        {
+            <li><a href="/teacher/Statement/Statement">Відомість</a></li>
+        }
+        else
+        {
+            <li><a href="/">Відомість</a></li>
+        }
+        <li><a href="/Chat/Index">Пошта</a></li>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <li><a href="/account/login" class="Button">Войти</a></li>
+        }
+        else
+        {
+            <li><a href="/account/logout" class="Button">Вийти</a></li>
+        }
+    </ul>
+</nav>

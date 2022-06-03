@@ -1,0 +1,29 @@
+﻿@model List<StudentsEstimates>
+<form asp-area="Teacher" asp-controller="Statement" asp-action="SaveStatement">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        string previousSubject = "";
+        if (previousSubject != Model[i].Subject.Name)
+        {
+            previousSubject = Model[i].Subject.Name;
+            <table class="default">
+                @Html.HiddenFor(x => Model[i].Id)
+                @Html.HiddenFor(x => Model[i].StudentId)
+                @Html.HiddenFor(x => Model[i].SubjectId)
+                <tr>
+                    <td>
+                        @Model[i].Student.StudentUser.Name
+                    </td>
+                    <td>
+                        @Model[i].Student.StudentUser.Surname
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(x => Model[i].Estimate)
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+    @*<input type="hidden" name="model" value="@Model" />*@
+    <button type="submit">Зберегти</button>
+</form>

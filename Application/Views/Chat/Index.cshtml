@@ -1,0 +1,35 @@
+﻿@model SelectList
+<div id="chatroom"></div>
+<div id="inputForm">
+    <select asp-items="Model" id="id">
+        <option id="-1">Виберете чат</option>
+    </select>
+    <input type="text" id="message" />
+    <input type="button" id="sendBtn" value="Отправить" />
+</div>
+<script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+<script>
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/chat")
+        .build();
+
+    hubConnection.on("Send", function (username ,message) {
+
+        let elem = document.createElement("p");
+        var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        var encodedMsg = username + " : " + msg;
+        elem.appendChild(document.createTextNode(encodedMsg));
+        let firstElem = document.getElementById("chatroom").firstChild;
+        document.getElementById("chatroom").insertBefore(elem, firstElem);
+
+    });
+
+    document.getElementById("sendBtn").addEventListener("click", function (e) {
+        let message = document.getElementById("message").value;
+        let id = document.getElementById("id").value;
+        console.log(message, id);
+        hubConnection.invoke("Send", message, id);
+    });
+
+    hubConnection.start();
+</script>
