@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Domain;
 using Application.Domain.Entities;
+using Application.Domain.Repositories.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -41,10 +42,14 @@ namespace Application.Areas.Methodist.Controllers
 			if (password!=null && password.Length > 6)
 				student.StudentUser.PasswordHash = new PasswordHasher<UniversityUser>().HashPassword(null, password);
 
+			if (student.Id == default)
+				student.Id = Guid.NewGuid();
+
 			student.StudentUser.SecurityStamp = string.Empty;
 			student.GroupId = groupId;
-
+			student.StudentId = student.StudentUser.Id;
 			dataManagerRef.StudentRepositoryRef.AddAndSaveStudent(student);
+			dataManagerRef.UniversityUserRoleRepositoryRef.AddAndSaveUserInRole(new IdentityUserRole<string> { UserId = student.StudentId, RoleId = EFRoleRepository.STUDENT_ROLE_ID });
 			return RedirectToAction("Index", "Home");
 		}
 

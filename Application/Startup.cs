@@ -45,6 +45,8 @@ namespace Application
 			services.AddTransient<IUniversityUserRepository, EFUniversityUserRepository>();
 			services.AddTransient<IGroupRepository, EFGroupRepository>();
 			services.AddTransient<IGroupSubjectRepository, EFGroupSubjectRepository>();
+			services.AddTransient<IUniversityUserRoleRepository, EFUniversityUserRoleRepository>();
+			services.AddTransient<IRoleRepository, EFRoleRepository>();
 			services.AddTransient<DataManager>();
 
 			services.AddDbContext<AppDbContext>(x => x.UseSqlServer("Data Source=(local); Database=MethodologistSoftware; Persist Security Info=false; User ID='sa'; Password='1234QWERzxc'; MultipleActiveResultSets=True; Trusted_Connection=False;"));

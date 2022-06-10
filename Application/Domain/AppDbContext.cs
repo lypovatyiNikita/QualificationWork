@@ -35,13 +35,13 @@ namespace Application.Domain
 				.HasOne(x => x.Block)
 				.WithMany(x => x.Schedules)
 				.HasForeignKey(x => x.BlockId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<Student>()
 				.HasOne(x => x.StudentUser)
 				.WithMany(x => x.Students)
 				.HasForeignKey(x => x.StudentId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<Student>()
 				.HasOne(x => x.Group)
@@ -53,43 +53,43 @@ namespace Application.Domain
 				.HasOne(x => x.TeacherUser)
 				.WithMany(x => x.Teachers)
 				.HasForeignKey(x => x.TeacherId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<GroupSubject>()
 				.HasOne(x => x.Group)
 				.WithMany(x => x.GroupSubjects)
 				.HasForeignKey(x => x.GroupId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<GroupSubject>()
 				.HasOne(x => x.Subject)
 				.WithMany(x => x.GroupsWithSubject)
 				.HasForeignKey(x => x.SubjectId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<TeacherSubject>()
 				.HasOne(x => x.Teacher)
 				.WithMany(x => x.TeacherSubjects)
 				.HasForeignKey(x => x.TeacherId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<TeacherSubject>()
 				.HasOne(x => x.Subject)
 				.WithMany(x => x.TeachersInSubject)
 				.HasForeignKey(x => x.SubjectId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<StudentsEstimates>()
 				.HasOne(x => x.Student)
 				.WithMany(x => x.StudentsEstimates)
 				.HasForeignKey(x => x.StudentId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<StudentsEstimates>()
 				.HasOne(x => x.Subject)
 				.WithMany(x => x.SubjectStudentsEstimates)
 				.HasForeignKey(x => x.SubjectId)
-				.OnDelete(DeleteBehavior.Restrict);
+				.OnDelete(DeleteBehavior.Cascade);
 
 			builder.Entity<ScheduleBlock>()
 				.HasOne(x => x.Teacher)

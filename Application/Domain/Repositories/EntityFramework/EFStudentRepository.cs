@@ -42,7 +42,7 @@ namespace Application.Domain.Repositories.EntityFramework
 			{
 				universityUserRepositoryRef.AddAndSaveUser(newStudent.StudentUser);
 				newStudent.StudentId = newStudent.StudentUser.Id;
-				if (newStudent.Id == default)
+				if (!AppDbContextRef.Students.Any(x => x.Id == newStudent.Id))
 					AppDbContextRef.Entry(newStudent).State = EntityState.Added;
 				else
 					AppDbContextRef.Entry(newStudent).State = EntityState.Modified;

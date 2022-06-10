@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Areas.Methodist.Model;
 using Application.Domain;
 using Application.Domain.Entities;
+using Application.Domain.Repositories.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -55,6 +56,9 @@ namespace Application.Areas.Methodist.Controllers
 			if (password != null && password.Length > 6)
 				model.Teacher.TeacherUser.PasswordHash = new PasswordHasher<UniversityUser>().HashPassword(null, password);
 
+			if (model.Teacher.Id == default)
+				model.Teacher.Id = Guid.NewGuid();
+
 			model.Teacher.TeacherUser.SecurityStamp = string.Empty;
 			List<TeacherSubject> choosenTeacherSubjects = new List<TeacherSubject>();
 			for (int i = 0; i < model.Subjects.Count(); i++)
@@ -71,8 +75,9 @@ namespace Application.Areas.Methodist.Controllers
 					SubjectId = new Guid(model.Subjects[i])
 				});
 			}
-			dataManagerRef.TeacherSubjectRepositoryRef.AddAndSaveTeacherSubjects(choosenTeacherSubjects);
 			dataManagerRef.TeacherRepositoryRef.AddAndSaveTeacher(model.Teacher);
+			dataManagerRef.UniversityUserRoleRepositoryRef.AddAndSaveUserInRole(new IdentityUserRole<string> { UserId = model.Teacher.TeacherId, RoleId = EFRoleRepository.TEACHER_ROLE_ID });
+			dataManagerRef.TeacherSubjectRepositoryRef.AddAndSaveTeacherSubjects(choosenTeacherSubjects);
 			return RedirectToAction("Index", "Home");
 		}
 

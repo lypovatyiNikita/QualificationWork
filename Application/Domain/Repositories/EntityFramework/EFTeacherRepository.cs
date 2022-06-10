@@ -40,7 +40,7 @@ namespace Application.Domain.Repositories.EntityFramework
 			try
 			{
 				universityUserRepositoryRef.AddAndSaveUser(newTeacher.TeacherUser);
-				if (AppDbContextRef.Teachers.Any(x => x == newTeacher))
+				if (!AppDbContextRef.Teachers.Any(x => x.Id == newTeacher.Id))
 					AppDbContextRef.Entry(newTeacher).State = EntityState.Added;
 				else
 					AppDbContextRef.Entry(newTeacher).State = EntityState.Modified;

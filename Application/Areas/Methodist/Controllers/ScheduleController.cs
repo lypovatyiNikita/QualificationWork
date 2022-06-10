@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Areas.Methodist.Model;
 using Application.Domain;
 using Application.Domain.Entities;
 using Application.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Application.Areas.Methodist.Controllers
 {
@@ -37,23 +39,39 @@ namespace Application.Areas.Methodist.Controllers
 			{
 				CurrentDateTime = dateToBack,
 				CurrentSchedules = dataManagerRef.ScheduleRepositoryRef.GetAllSheduleByDate(DateTime.Today).ToArray(),
-				AllSheduleBlocks = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(dataManagerRef.ScheduleBlockRepositoryRef.GetAllBlocks().ToList(), "Id", "Title")
+				AllSheduleBlocks = new SelectList(dataManagerRef.ScheduleBlockRepositoryRef.GetAllBlocks().ToList(), "Id", "Title")
 			});
 		}
 
 		public IActionResult AddScheduleBlock()
 		{
-			return View(new ScheduleBlock());
+			return View(new ScheduleBlockModel
+			{
+				BlockRef = new ScheduleBlock(),
+				TeachersRef = new SelectList(dataManagerRef.TeacherRepositoryRef.GetAllTeachers(), "Id", "TeacherUser"),
+				GroupsRef = new SelectList(dataManagerRef.GroupRepositoryRef.GetAllGroups(), "Id", "Name")
+			});
 		}
 
 		public IActionResult EditScheduleBlock(Guid blockID)
 		{
-			return View("AddScheduleBlock", dataManagerRef.ScheduleBlockRepositoryRef.GetBlockById(blockID));
+			ScheduleBlock gettedBlock = dataManagerRef.ScheduleBlockRepositoryRef.GetBlockById(blockID);
+			return View("AddScheduleBlock", new ScheduleBlockModel
+			{
+				BlockRef = gettedBlock,
+				TeachersRef = new SelectList(dataManagerRef.TeacherRepositoryRef.GetAllTeachers(), "Id", "TeacherUser", gettedBlock.TeacherId),
+				GroupsRef = new SelectList(dataManagerRef.GroupRepositoryRef.GetAllGroups(), "Id", "Name", gettedBlock.GroupId)
+			});
 		}
 
-		public IActionResult SaveScheduleBlock(ScheduleBlock scheduleBlock)
+		public IActionResult SaveScheduleBlock(ScheduleBlockModel scheduleBlockModel, Guid teacherId, Guid groupId)
 		{
-			dataManagerRef.ScheduleBlockRepositoryRef.AddAndSaveBlock(scheduleBlock);
+			if (teacherId != default)
+				scheduleBlockModel.BlockRef.TeacherId = teacherId;
+			if (groupId != default)
+				scheduleBlockModel.BlockRef.GroupId= groupId;
+
+			dataManagerRef.ScheduleBlockRepositoryRef.AddAndSaveBlock(scheduleBlockModel.BlockRef);
 			return Redirect("~/schedule");
 		}
 

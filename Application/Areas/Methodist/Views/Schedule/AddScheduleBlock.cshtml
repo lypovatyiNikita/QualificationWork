@@ -1,27 +1,23 @@
-﻿@model ScheduleBlock
+﻿@model Application.Areas.Methodist.Model.ScheduleBlockModel
 
 <form asp-area="Methodist" asp-controller="Schedule" asp-action="SaveScheduleBlock" method="post">
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="BlockRef.Id" />
     <div asp-validation-summary="All"></div>
     <div class="div-box">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" />
-        <span asp-validation-for="Title"></span>
+        <label asp-for="BlockRef.Title"></label>
+        <input asp-for="BlockRef.Title" />
+        <span asp-validation-for="BlockRef.Title"></span>
     </div>
     <div class="div-box">
-        <label asp-for="Teacher"></label>
-        <input asp-for="Teacher" />
-        <span asp-validation-for="Teacher"></span>
+        <select name="teacherId" asp-items="Model.TeachersRef"></select>
     </div>
     <div class="div-box">
-        <label asp-for="Audience"></label>
-        <input asp-for="Audience" />
-        <span asp-validation-for="Audience"></span>
+        <label asp-for="BlockRef.Audience"></label>
+        <input asp-for="BlockRef.Audience" />
+        <span asp-validation-for="BlockRef.Audience"></span>
     </div>
     <div class="div-box">
-        <label asp-for="Group"></label>
-        <input asp-for="Group" />
-        <span asp-validation-for="Group"></span>
+        <select name="groupId" asp-items="Model.GroupsRef"></select>
     </div>
     <input type="submit" value="Сохранить" />
 </form>

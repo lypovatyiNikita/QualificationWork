@@ -25,7 +25,7 @@ namespace Application.Domain.Repositories.EntityFramework
 
 		public IQueryable<Subject> GetSubjectsInGroup(Guid groupId)
 		{
-			return GetAllGroupSubjects().Where(x => x.GroupId == groupId).Select(x => x.Subject);
+			return GetAllGroupSubjects().Include(x => x.Group).Include(x => x.Subject).Where(x => x.GroupId == groupId).Select(x => x.Subject);
 		}
 
 		public void AddAndSaveGroupsWithSubjects(List<GroupSubject> groupSubjects)

@@ -20,7 +20,7 @@ namespace Application.Domain.Repositories.EntityFramework
 
 		public IQueryable<ScheduleBlock> GetAllBlocks()
 		{
-			return AppDbContextRef.ScheduleBlock;
+			return AppDbContextRef.ScheduleBlock.Include(x => x.Group).Include(x => x.Teacher).Include(x => x.Teacher.TeacherUser);
 		}
 
 		public ScheduleBlock GetBlockById(Guid id)

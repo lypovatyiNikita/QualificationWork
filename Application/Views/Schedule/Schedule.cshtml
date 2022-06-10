@@ -22,7 +22,7 @@
 </div>
 <div style="
         margin: 4px, 4px;
-        padding: 4px;
+        padding: 1px;
         width: 100%;
         overflow-x: auto;
         overflow-y: hidden;
@@ -48,13 +48,17 @@
                     @if (Model.CurrentSchedules[j].Couple == i)
                     {
                         <td>
-                            <div>
-                                <table>
-                                    <tr>@Model.CurrentSchedules[j].Block.Title</tr>
-                                    <tr>@Model.CurrentSchedules[j].Block.Audience</tr>
-                                    <tr>@Model.CurrentSchedules[j].Block.Teacher</tr>
-                                    <tr>@Model.CurrentSchedules[j].Block.Group</tr>
-                                </table>
+                            <div class="sheduleBlock">
+                                @Model.CurrentSchedules[j].Block.Title<hr />
+                                @Model.CurrentSchedules[j].Block.Audience<hr />
+                                @if (Model.CurrentSchedules[j].Block.Teacher != null)
+                                {
+                                    @Model.CurrentSchedules[j].Block.Teacher.TeacherUser<hr />
+                                }
+                                @if (Model.CurrentSchedules[j].Block.Group != null)
+                                {
+                                    @Model.CurrentSchedules[j].Block.Group.Name<hr />
+                                }
                             </div>
                         </td>
                     }

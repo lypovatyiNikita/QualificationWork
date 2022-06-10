@@ -21,8 +21,9 @@ namespace Application.Domain
         public IUniversityUserRepository UniversityUserRepositoryRef;
         public IGroupRepository GroupRepositoryRef;
         public IGroupSubjectRepository GroupSubjectRepositoryRef;
+        public IUniversityUserRoleRepository UniversityUserRoleRepositoryRef;
 
-        public DataManager(INewsRepository newsRepository, IScheduleRepository scheduleRepository, IMessageRepository messageRepository, IScheduleBlockRepository scheduleBlockRepository, IStudentRepository studentRepository, IStudentsEstimatesRepository studentsEstimatesRepository, ITeacherRepository teacherRepository, ITeacherSubjectRepository teacherSubjectRepository, ISubjectRepository subjectRepository, IUniversityUserRepository universityUserRepository, IGroupRepository groupRepository, IGroupSubjectRepository groupSubjectRepository)
+        public DataManager(INewsRepository newsRepository, IScheduleRepository scheduleRepository, IMessageRepository messageRepository, IScheduleBlockRepository scheduleBlockRepository, IStudentRepository studentRepository, IStudentsEstimatesRepository studentsEstimatesRepository, ITeacherRepository teacherRepository, ITeacherSubjectRepository teacherSubjectRepository, ISubjectRepository subjectRepository, IUniversityUserRepository universityUserRepository, IGroupRepository groupRepository, IGroupSubjectRepository groupSubjectRepository, IUniversityUserRoleRepository universityUserRoleRepository)
 		{
             NewsRepositoryRef = newsRepository;
             ScheduleRepositoryRef = scheduleRepository;
@@ -36,6 +37,7 @@ namespace Application.Domain
             UniversityUserRepositoryRef = universityUserRepository;
             GroupRepositoryRef = groupRepository;
             GroupSubjectRepositoryRef = groupSubjectRepository;
+            UniversityUserRoleRepositoryRef = universityUserRoleRepository;
         }
     }
 }
