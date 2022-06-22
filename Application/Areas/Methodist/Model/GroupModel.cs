@@ -11,8 +11,7 @@ namespace Application.Areas.Methodist.Model
     public class GroupModel
     {
         public Group Group { get; set; }
-        public SelectList Groups { get; set; }
         public List<string> SubjectsId { get; set; }
-        public SelectList Subjects { get; set; }
+        public MultiSelectList Subjects { get; set; }
     }
 }

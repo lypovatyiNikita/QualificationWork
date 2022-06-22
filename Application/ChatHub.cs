@@ -30,7 +30,7 @@ namespace Application
             var messages = dataManagerRef.MessageRepositoryRef.GetAllMessagesInUser(userID).ToList();
             for (int i = 0; i < messages.Count; i++)
             {
-                Clients.User(userID).SendAsync("Send", messages[i].MessageText);
+                Clients.User(userID).SendAsync("Send", messages[i].UserName, messages[i].MessageText);
             }
             return base.OnConnectedAsync();
         }
@@ -63,6 +63,7 @@ namespace Application
             {
                 dataManagerRef.MessageRepositoryRef.AddAndSaveMessage(new Domain.Entities.Message()
                 {
+                    UserName = dataManagerRef.UniversityUserRepositoryRef.GetUserById(currentUser.FindFirst(ClaimTypes.NameIdentifier).Value).ToString(),
                     NameId = userID,
                     MessageText = message
                 });

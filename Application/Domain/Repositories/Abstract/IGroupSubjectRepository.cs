@@ -10,7 +10,8 @@ namespace Application.Domain.Repositories.Abstract
     public interface IGroupSubjectRepository
     {
         IQueryable<GroupSubject> GetAllGroupSubjects();
-        IQueryable<Subject> GetSubjectsInGroup(Guid groupId);
+        IQueryable<Subject> GetSubjectsInGroup(Guid? groupId);
         void AddAndSaveGroupsWithSubjects(List<GroupSubject> groupSubjects);
+        void EditSubjectsInGroup(List<GroupSubject> choosenSubjects, List<GroupSubject> hadSubjects);
     }
 }

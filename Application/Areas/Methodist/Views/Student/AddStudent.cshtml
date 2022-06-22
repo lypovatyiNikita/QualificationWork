@@ -1,25 +1,26 @@
-﻿@model Student
+﻿@model Application.Areas.Methodist.Model.StudentModel
 
 <form asp-area="Methodist" asp-controller="Student" asp-action="Save" method="post">
-    <input type="hidden" asp-for="Id"/>
-    <input type="hidden" asp-for="StudentId"/>
+    <input type="hidden" asp-for="Student.Id"/>
+    <input type="hidden" asp-for="Student.StudentId"/>
+    <input type="hidden" asp-for="UniversityUser.Id">
     <div asp-validation-summary="All"></div>
     <div class="div-box">
-        <label asp-for="StudentUser.UserName"></label>
-        <input asp-for="StudentUser.UserName" />
+        <label asp-for="UniversityUser.UserName"></label>
+        <input asp-for="UniversityUser.UserName" />
     </div>
     <div class="div-box">
         <label>Новий Пароль</label>
         <input type="text" name="password" />
     </div>
     <div class="div-box">
-        <label asp-for="StudentUser.Name"></label>
-        <input asp-for="StudentUser.Name" />
+        <label asp-for="UniversityUser.Name"></label>
+        <input asp-for="UniversityUser.Name" />
     </div>
     <div class="div-box">
-        <label asp-for="StudentUser.Surname"></label>
-        <input asp-for="StudentUser.Surname" />
+        <label asp-for="UniversityUser.Surname"></label>
+        <input asp-for="UniversityUser.Surname" />
     </div>
-    <select name="groupId" asp-items="ViewBag.Groups"></select>
+    <select name="groupId" asp-items="Model.Groups"></select>
     <input type="submit" value="Зберегти" />
 </form>

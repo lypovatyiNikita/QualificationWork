@@ -18,6 +18,11 @@ namespace Application.Domain.Repositories.EntityFramework
 			AppDbContextRef = context;
 		}
 
+		public IQueryable<UniversityUser> GetAllUniversityUsers()
+		{
+			return AppDbContextRef.UniversityUser;
+		}
+
 		public UniversityUser GetUserById(string id)
 		{
 			return AppDbContextRef.UniversityUser.First(x => x.Id == id);
@@ -29,7 +34,12 @@ namespace Application.Domain.Repositories.EntityFramework
 				AppDbContextRef.Entry(newUser).State = EntityState.Added;
 			else
 			{
-				AppDbContextRef.UniversityUser.Update(newUser);
+				UniversityUser user = AppDbContextRef.UniversityUser.First(x => x.Id == newUser.Id);
+				user.UserName = newUser.UserName;
+				user.Name = newUser.Name;
+				user.Surname = newUser.Surname;
+				user.PasswordHash = newUser.PasswordHash;
+				AppDbContextRef.Entry(user).State = EntityState.Modified;
 			}
 			AppDbContextRef.SaveChanges();
 		}

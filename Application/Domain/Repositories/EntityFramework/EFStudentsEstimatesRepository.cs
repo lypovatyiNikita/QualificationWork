@@ -25,7 +25,7 @@ namespace Application.Domain.Repositories.EntityFramework
 
 		public List<StudentsEstimates> GetAllEstimatesWithSubjects(List<Subject> subjects)
 		{
-			List<StudentsEstimates> gettedList = AppDbContextRef.StudentsEstimates.Include(x => x.Subject).Include(x => x.Student).ThenInclude(x => x.StudentUser).ToList();
+			List<StudentsEstimates> gettedList = AppDbContextRef.StudentsEstimates.Include(x => x.Subject).Include(x => x.Student).ThenInclude(x => x.StudentUser).Include(x => x.Student.Group).ToList();
 			List<StudentsEstimates> answer = new List<StudentsEstimates>();
 			for (int i = 0; i < subjects.Count; i++)
 			{
@@ -45,12 +45,48 @@ namespace Application.Domain.Repositories.EntityFramework
 		{
 			foreach (var item in studentsEstimates)
 			{
-				if (item.Id == default)
+				if (!AppDbContextRef.StudentsEstimates.Any(x => x.Id == item.Id))
 					AppDbContextRef.Entry(item).State = EntityState.Added;
 				else
 					AppDbContextRef.Entry(item).State = EntityState.Modified;
 			}
 			AppDbContextRef.SaveChanges();
+		}
+
+		public void EditSubjectsInStudent(List<StudentsEstimates> choosenSubjects, List<StudentsEstimates> hadSubjects)
+		{
+			List<StudentsEstimates> newTeacherSubjects = new List<StudentsEstimates>();
+			List<StudentsEstimates> deletedTeacherSubjects = new List<StudentsEstimates>();
+			for (int i = 0; i < choosenSubjects.Count; i++)
+			{
+				if (!IsContainsValueInList(hadSubjects, choosenSubjects[i]))
+				{
+					newTeacherSubjects.Add(choosenSubjects[i]);
+				}
+			}
+			for (int i = 0; i < hadSubjects.Count; i++)
+			{
+				if (!IsContainsValueInList(choosenSubjects, hadSubjects[i]) && !IsContainsValueInList(newTeacherSubjects, hadSubjects[i]))
+				{
+					deletedTeacherSubjects.Add(hadSubjects[i]);
+				}
+			}
+			for (int i = 0; i < deletedTeacherSubjects.Count; i++)
+			{
+				AppDbContextRef.StudentsEstimates.Remove(deletedTeacherSubjects[i]);
+			}
+			AppDbContextRef.SaveChanges();
+			AddOrEdirEstimates(newTeacherSubjects);
+		}
+
+		private bool IsContainsValueInList(List<StudentsEstimates> list, StudentsEstimates value)
+		{
+			for (int i = 0; i < list.Count; i++)
+			{
+				if (list[i].SubjectId == value.SubjectId && list[i].SubjectId == value.SubjectId)
+					return true;
+			}
+			return false;
 		}
 	}
 }

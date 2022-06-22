@@ -28,30 +28,29 @@ namespace Application.Domain.Repositories.EntityFramework
 
 		public Student GetStudentById(Guid? id)
 		{
-			return AppDbContextRef.Students.Include(x => x.StudentUser).First(x => x.Id == id);
+			return AppDbContextRef.Students.Include(x => x.StudentUser).Include(x => x.Group).First(x => x.Id == id);
 		}
 
 		public Student GetStudentByUserId(string userId)
 		{
 			return AppDbContextRef.Students.Include(x => x.StudentUser).First(x => x.StudentId == userId);
 		}
+		public string GetPasswordByStudentId(Guid id)
+		{
+			Student gotStudent = AppDbContextRef.Students.Include(x => x.StudentUser).First(x => x.Id == id);
+			string password = gotStudent.StudentUser.PasswordHash;
+			AppDbContextRef.Entry(gotStudent.StudentUser).State = EntityState.Detached;
+			AppDbContextRef.Entry(gotStudent).State = EntityState.Detached;
+			return password;
+		}
 
 		public void AddAndSaveStudent(Student newStudent)
 		{
-			try
-			{
-				universityUserRepositoryRef.AddAndSaveUser(newStudent.StudentUser);
-				newStudent.StudentId = newStudent.StudentUser.Id;
-				if (!AppDbContextRef.Students.Any(x => x.Id == newStudent.Id))
-					AppDbContextRef.Entry(newStudent).State = EntityState.Added;
-				else
-					AppDbContextRef.Entry(newStudent).State = EntityState.Modified;
-				AppDbContextRef.SaveChanges();
-			}
-			catch (Exception e)
-			{
-
-			};
+			if (!AppDbContextRef.Students.Any(x => x.Id == newStudent.Id))
+				AppDbContextRef.Entry(newStudent).State = EntityState.Added;
+			else
+				AppDbContextRef.Entry(newStudent).State = EntityState.Modified;
+			AppDbContextRef.SaveChanges();
 		}
 
 		public void DeleteStudent(Guid id)

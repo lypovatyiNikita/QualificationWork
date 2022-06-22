@@ -12,5 +12,6 @@ namespace Application.Domain.Repositories.Abstract
         IQueryable<StudentsEstimates> GetAllEstimatesInStudent(Guid studentId);
         List<StudentsEstimates> GetAllEstimatesWithSubjects(List<Subject> subjects);
         void AddOrEdirEstimates(List<StudentsEstimates> studentsEstimates);
+        void EditSubjectsInStudent(List<StudentsEstimates> choosenSubjects, List<StudentsEstimates> hadSubjects);
     }
 }

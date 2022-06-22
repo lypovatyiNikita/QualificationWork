@@ -1,5 +1,89 @@
-﻿<div>
-    <h1>
-        @await Html.PartialAsync("SidebarPartial")
-    </h1>
+﻿@model HomeViewModel
+<div class="container">
+    <div class="row">
+        <div class = "col-3">
+            @foreach (NewsBlock news in Model.NewsBlocks)
+            {
+                <form asp-area="" asp-controller="News" asp-action="New" asp-route-id="@news.Id" method="post">
+                    <h6>@news.CreateDate.ToLongDateString()</h6>
+                    <h2>@news.Title</h2>
+                    @news.Subtitle
+                    <br><button type="submit">Відкрити</button>
+                </form>
+                <hr>
+            }
+        </div>
+        <div class = "col">
+            <h2 align="center">
+                Розклад
+            </h2>
+            <h1 align="center">
+                @Model.ScheduleViewModel.DateInString
+            </h1>
+            <div class="row">
+                @if (Model.ScheduleViewModel.CurrentDateTime == DateTime.Today.AddDays(-1))
+                {
+                    <b>Вчора</b>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-days="-1">Вчора</a>
+                }
+                @if (Model.ScheduleViewModel.CurrentDateTime == DateTime.Today)
+                {
+                    <b>Сьогодні</b>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Сьогодні</a>
+                }
+                @if (Model.ScheduleViewModel.CurrentDateTime == DateTime.Today.AddDays(1))
+                {
+                    <b>Завтра</b>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-days="1">Завтра</a>
+                }
+                @if (Model.ScheduleViewModel.CurrentDateTime == DateTime.Today.AddDays(2))
+                {
+                    <b>ПісляЗавтра</b>
+                }
+                else
+                {
+                    <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-days="2">ПісляЗавтра</a>
+                }
+            </div>
+            <table class="schedule">
+                @for (int i = 0; i < 8; i++)
+                {
+                    <tr>
+                        <td>
+                            @(i + 1)
+                        </td>
+                        @for (int j = 0; j < Model.ScheduleViewModel.CurrentSchedules.Length; j++)
+                        {
+                            @if (Model.ScheduleViewModel.CurrentSchedules[j].Couple == i)
+                            {
+                                <td>
+                                    <div class="sheduleBlock">
+                                        @Model.ScheduleViewModel.CurrentSchedules[j].Block.Title<hr />
+                                        @Model.ScheduleViewModel.CurrentSchedules[j].Block.Audience<hr />
+                                        @if (Model.ScheduleViewModel.CurrentSchedules[j].Block.Teacher != null)
+                                        {
+                                            @Model.ScheduleViewModel.CurrentSchedules[j].Block.Teacher.TeacherUser<hr />
+                                        }
+                                        @if (Model.ScheduleViewModel.CurrentSchedules[j].Block.Group != null)
+                                        {
+                                            @Model.ScheduleViewModel.CurrentSchedules[j].Block.Group.Name<hr />
+                                        }
+                                    </div>
+                                </td>
+                            }
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
 </div>

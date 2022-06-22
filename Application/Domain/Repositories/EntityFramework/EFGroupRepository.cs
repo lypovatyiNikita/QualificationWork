@@ -28,9 +28,14 @@ namespace Application.Domain.Repositories.EntityFramework
 			return AppDbContextRef.Groups.First(x => x.Id == id);
 		}
 
+		public List<Student> GetStudentsInGroup(Guid groupId)
+		{
+			return AppDbContextRef.Groups.Include(x => x.Students).First(x => x.Id == groupId).Students;
+		}
+
 		public void AddAndSaveGroup(Group newGroup)
 		{
-			if (newGroup.Id == default)
+			if (!AppDbContextRef.Groups.Any(x => x.Id == newGroup.Id))
 				AppDbContextRef.Entry(newGroup).State = EntityState.Added;
 			else
 				AppDbContextRef.Entry(newGroup).State = EntityState.Modified;

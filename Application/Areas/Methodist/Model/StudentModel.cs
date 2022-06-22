@@ -1,5 +1,4 @@
-﻿using Application.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -9,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace Application.Areas.Methodist.Model
 {
-    public class TeacherModel
+    public class StudentModel
     {
-        public Domain.Entities.Teacher Teacher { get; set; }
+        public Domain.Entities.Student Student { get; set; }
         public UniversityUser UniversityUser { get; set; }
-        public List<string> Subjects { get; set; }
-        public MultiSelectList SubjectsSelect { get; set; }
+        public SelectList Groups { get; set; }
     }
 }

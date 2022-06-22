@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Areas.Methodist.Model;
 using Application.Domain;
 using Application.Domain.Entities;
 using Application.Domain.Repositories.EntityFramework;
@@ -24,32 +25,73 @@ namespace Application.Areas.Methodist.Controllers
 		public IActionResult AddStudent()
 		{
 			ViewBag.Groups = new SelectList(dataManagerRef.GroupRepositoryRef.GetAllGroups().ToList(), "Id", "Name");
-			return View(new Domain.Entities.Student() { StudentUser = new UniversityUser() });
+			return View(new StudentModel
+			{
+				Student = new Domain.Entities.Student(),
+				UniversityUser = new UniversityUser(),
+				Groups = new SelectList(dataManagerRef.GroupRepositoryRef.GetAllGroups().ToList(), "Id", "Name")
+			});
 		}
 
 		public IActionResult EditStudent(Guid studentID)
 		{
 			Domain.Entities.Student student = dataManagerRef.StudentRepositoryRef.GetStudentById(studentID);
-			student.StudentUser = dataManagerRef.UniversityUserRepositoryRef.GetUserById(student.StudentId);
 			List<Group> groups = dataManagerRef.GroupRepositoryRef.GetAllGroups().ToList();
-			ViewBag.Groups = new SelectList(groups, "Id", "Name", groups.First(x => x.Id == student.GroupId));
-			return View("AddStudent", student);
+			return View("AddStudent", new StudentModel
+			{
+				Student = student,
+				UniversityUser = dataManagerRef.UniversityUserRepositoryRef.GetUserById(student.StudentId),
+				Groups = new SelectList(groups, "Id", "Name", groups.First(x => x.Id == student.GroupId))
+			});
 		}
 
-		public IActionResult Save(Domain.Entities.Student student, string password, Guid groupId)
+		public IActionResult Save(StudentModel studentModel, string password, Guid groupId)
 		{
-			student.StudentUser.NormalizedUserName = student.StudentUser.UserName.ToUpper();
-			if (password!=null && password.Length > 6)
-				student.StudentUser.PasswordHash = new PasswordHasher<UniversityUser>().HashPassword(null, password);
+			studentModel.UniversityUser.NormalizedUserName = studentModel.UniversityUser.UserName.ToUpper();
+			if (password != null && password.Length > 6)
+				studentModel.UniversityUser.PasswordHash = new PasswordHasher<UniversityUser>().HashPassword(null, password);
+			else if (password == null && studentModel.Student.Id != default)
+				studentModel.UniversityUser.PasswordHash = dataManagerRef.StudentRepositoryRef.GetPasswordByStudentId(studentModel.Student.Id);
 
-			if (student.Id == default)
-				student.Id = Guid.NewGuid();
+			if (studentModel.Student.Id == default)
+				studentModel.Student.Id = Guid.NewGuid();
 
-			student.StudentUser.SecurityStamp = string.Empty;
-			student.GroupId = groupId;
-			student.StudentId = student.StudentUser.Id;
-			dataManagerRef.StudentRepositoryRef.AddAndSaveStudent(student);
-			dataManagerRef.UniversityUserRoleRepositoryRef.AddAndSaveUserInRole(new IdentityUserRole<string> { UserId = student.StudentId, RoleId = EFRoleRepository.STUDENT_ROLE_ID });
+			if (studentModel.UniversityUser.Id == default)
+			{
+				studentModel.UniversityUser.Id = Guid.NewGuid().ToString();
+			}
+
+			if (studentModel.Student.StudentId == null)
+			{
+				studentModel.Student.StudentId = studentModel.UniversityUser.Id;
+			}
+
+			studentModel.UniversityUser.SecurityStamp = string.Empty;
+			studentModel.Student.GroupId = groupId;
+			dataManagerRef.UniversityUserRepositoryRef.AddAndSaveUser(studentModel.UniversityUser);
+			dataManagerRef.StudentRepositoryRef.AddAndSaveStudent(studentModel.Student);
+
+			IdentityUserRole<string> editedUserRole = dataManagerRef.UniversityUserRoleRepositoryRef.GetUserRoleByUserIdAndRoleId(studentModel.Student.StudentId, EFRoleRepository.STUDENT_ROLE_ID);
+			if (editedUserRole == null)
+				dataManagerRef.UniversityUserRoleRepositoryRef.AddAndSaveUserInRole(new IdentityUserRole<string> { UserId = studentModel.Student.StudentId, RoleId = EFRoleRepository.STUDENT_ROLE_ID });
+
+			if (dataManagerRef.StudentsEstimatesRepositoryRef.GetAllEstimatesInStudent(studentModel.Student.Id) == null || dataManagerRef.StudentsEstimatesRepositoryRef.GetAllEstimatesInStudent(studentModel.Student.Id).Count() == 0)
+			{
+				List<Subject> groupSubjects = dataManagerRef.GroupSubjectRepositoryRef.GetSubjectsInGroup(studentModel.Student.GroupId).ToList();
+				List<StudentsEstimates> studentEstimates = new List<StudentsEstimates>();
+				for (int i = 0; i < groupSubjects.Count; i++)
+				{
+					var id = Guid.NewGuid();
+					studentEstimates.Add(new StudentsEstimates
+					{
+						Id = id,
+						StudentId = studentModel.Student.Id,
+						SubjectId = groupSubjects[i].Id
+					});
+				}
+				dataManagerRef.StudentsEstimatesRepositoryRef.AddOrEdirEstimates(studentEstimates);
+			}
+
 			return RedirectToAction("Index", "Home");
 		}
 

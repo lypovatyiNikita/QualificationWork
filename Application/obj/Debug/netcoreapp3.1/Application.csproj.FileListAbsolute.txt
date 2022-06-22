@@ -25,7 +25,6 @@ D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Views\Shared\MetaTagsPartial.cshtml.g.cs
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Views\Shared\NavPartial.cshtml.g.cs
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Views\Shared\ScriptsPartial.cshtml.g.cs
-D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Views\Shared\SidebarPartial.cshtml.g.cs
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Application.RazorTargetAssemblyInfo.cs
 D:\univer\Диплом\Application\Application\Application\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
@@ -166,3 +165,4 @@ D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Areas\Methodist\Views\Student\AddStudent.cshtml.g.cs
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Areas\Methodist\Views\Teacher\AddTeacher.cshtml.g.cs
 D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Areas\Methodist\Views\Group\AddGroup.cshtml.g.cs
+D:\univer\Диплом\Application\Application\Application\obj\Debug\netcoreapp3.1\Razor\Areas\Methodist\Views\Subject\AddSubject.cshtml.g.cs

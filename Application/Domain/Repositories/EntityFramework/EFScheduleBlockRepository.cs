@@ -23,6 +23,11 @@ namespace Application.Domain.Repositories.EntityFramework
 			return AppDbContextRef.ScheduleBlock.Include(x => x.Group).Include(x => x.Teacher).Include(x => x.Teacher.TeacherUser);
 		}
 
+		public IQueryable<ScheduleBlock> GetAllBlocksInGroup(Guid? groupId)
+		{
+			return GetAllBlocks().Where(x => x.GroupId == groupId);
+		}
+
 		public ScheduleBlock GetBlockById(Guid id)
 		{
 			return AppDbContextRef.ScheduleBlock.First(x => x.Id == id);

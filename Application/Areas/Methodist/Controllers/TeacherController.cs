@@ -25,26 +25,28 @@ namespace Application.Areas.Methodist.Controllers
 
 		public IActionResult AddTeacher()
 		{
-			IQueryable<Subject> subjects = dataManagerRef.SubjectRepositoryRef.GetAllSubjects();
-			List<string> subjectsId = subjects.Select(x => x.Id.ToString()).ToList();
+			List<Subject> subjects = dataManagerRef.SubjectRepositoryRef.GetAllSubjects().ToList();
+			List<string> subjectsId = new List<string>();
+			MultiSelectList subjectsSelect = new MultiSelectList(subjects, "Id", "Name");
 			TeacherModel teacherModel = new TeacherModel()
 			{
 				Teacher = new Domain.Entities.Teacher() { TeacherUser = new UniversityUser() },
 				Subjects = subjectsId,
-				SubjectsSelect = new SelectList(subjects, "Id", "Name")
+				SubjectsSelect = subjectsSelect
 			};
 			return View(teacherModel);
 		}
 
 		public IActionResult EditTeacher(Guid teacherID)
 		{
-			IQueryable<Subject> subjects = dataManagerRef.SubjectRepositoryRef.GetAllSubjects();
-			List<string> subjectsId = subjects.Select(x => x.Id.ToString()).ToList();
+			List<Subject> subjects = dataManagerRef.SubjectRepositoryRef.GetAllSubjects().ToList();
+			List<string> subjectsId = dataManagerRef.TeacherSubjectRepositoryRef.GetSubjectsInTeacher(teacherID).Select(x => x.Id.ToString()).ToList();
+			SelectList subjectsSelect = new SelectList(subjects, "Id", "Name");
 			TeacherModel teacherModel = new TeacherModel()
 			{
 				Teacher = dataManagerRef.TeacherRepositoryRef.GetTeacherById(teacherID),
 				Subjects = subjectsId,
-				SubjectsSelect = new SelectList(subjects, "Id", "Name")
+				SubjectsSelect = subjectsSelect
 			};
 			return View("AddTeacher", teacherModel);
 		}
@@ -60,25 +62,36 @@ namespace Application.Areas.Methodist.Controllers
 				model.Teacher.Id = Guid.NewGuid();
 
 			model.Teacher.TeacherUser.SecurityStamp = string.Empty;
-			List<TeacherSubject> choosenTeacherSubjects = new List<TeacherSubject>();
-			for (int i = 0; i < model.Subjects.Count(); i++)
-			{
-				Guid id = Guid.NewGuid();
-				if (dataManagerRef.TeacherSubjectRepositoryRef.GetAllTeacherSubjects().Where(x => x.TeacherId == model.Teacher.Id).Where(x => x.SubjectId == new Guid(model.Subjects[i])).Any())
-				{
-					id = dataManagerRef.TeacherSubjectRepositoryRef.GetAllTeacherSubjects().Where(x => x.TeacherId == model.Teacher.Id).First(x => x.SubjectId == new Guid(model.Subjects[i])).Id;
-				}
-				choosenTeacherSubjects.Add(new TeacherSubject
-				{
-					Id = id,
-					TeacherId = model.Teacher.Id,
-					SubjectId = new Guid(model.Subjects[i])
-				});
-			}
+			dataManagerRef.UniversityUserRepositoryRef.AddAndSaveUser(model.Teacher.TeacherUser);
 			dataManagerRef.TeacherRepositoryRef.AddAndSaveTeacher(model.Teacher);
-			dataManagerRef.UniversityUserRoleRepositoryRef.AddAndSaveUserInRole(new IdentityUserRole<string> { UserId = model.Teacher.TeacherId, RoleId = EFRoleRepository.TEACHER_ROLE_ID });
-			dataManagerRef.TeacherSubjectRepositoryRef.AddAndSaveTeacherSubjects(choosenTeacherSubjects);
+
+			IdentityUserRole<string> editedUserRole = dataManagerRef.UniversityUserRoleRepositoryRef.GetUserRoleByUserIdAndRoleId(model.Teacher.TeacherId, EFRoleRepository.TEACHER_ROLE_ID);
+			if (editedUserRole == default)
+				dataManagerRef.UniversityUserRoleRepositoryRef.AddAndSaveUserInRole(new IdentityUserRole<string> { UserId = model.Teacher.TeacherId, RoleId = EFRoleRepository.TEACHER_ROLE_ID });
+
+			List<TeacherSubject> teacherSubjects = dataManagerRef.TeacherSubjectRepositoryRef.GetAllTeacherSubjectsByTeacherId(model.Teacher.Id).ToList();
+			List<TeacherSubject> choosenTeacherSubjects = new List<TeacherSubject>();
+			if (model.Subjects != null)
+			{
+				for (int i = 0; i < model.Subjects.Count; i++)
+				{
+					Guid id = Guid.NewGuid();
+					choosenTeacherSubjects.Add(new TeacherSubject
+					{
+						Id = id,
+						TeacherId = model.Teacher.Id,
+						SubjectId = new Guid(model.Subjects[i])
+					});
+				}
+			}
+			dataManagerRef.TeacherSubjectRepositoryRef.EditSubjectsInTeacher(choosenTeacherSubjects, teacherSubjects);
+
 			return RedirectToAction("Index", "Home");
+		}
+
+		public void Deselect(TeacherModel model)
+		{
+			model.Subjects = new List<string>();
 		}
 
 		public IActionResult DeleteTeacher(Guid teacherID)

@@ -23,20 +23,26 @@ namespace Application.Domain.Repositories.EntityFramework
 			return AppDbContextRef.UserRoles.First(x => x.UserId == userid);
 		}
 
+		public IdentityUserRole<string> GetUserRoleByUserIdAndRoleId(string userId, string roleId)
+		{
+			IQueryable<IdentityUserRole<string>> identityUserRoles = AppDbContextRef.UserRoles.Where(x => x.UserId == userId);
+			return identityUserRoles?.FirstOrDefault(x => x.RoleId == roleId);
+		}
+
 		public void AddAndSaveUserInRole(IdentityUserRole<string> newUserRole)
 		{
 			if (!AppDbContextRef.UserRoles.Where(x => x.UserId == newUserRole.UserId).Any(x => x.RoleId == newUserRole.RoleId))
 				AppDbContextRef.Entry(newUserRole).State = EntityState.Added;
 			else
 			{
-				AppDbContextRef.UserRoles.Update(newUserRole);
+				AppDbContextRef.Entry(newUserRole).State = EntityState.Modified;
 			}
 			AppDbContextRef.SaveChanges();
 		}
 
 		public void DeleteUserInRole(string userid, string roleId)
 		{
-			AppDbContextRef.UserRoles.Remove(AppDbContextRef.UserRoles.Where(x => x.UserId == userid).First(x => x.RoleId==roleId));
+			AppDbContextRef.UserRoles.Remove(AppDbContextRef.UserRoles.Where(x => x.UserId == userid).First(x => x.RoleId == roleId));
 			AppDbContextRef.SaveChanges();
 		}
 	}

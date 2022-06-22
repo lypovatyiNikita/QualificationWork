@@ -11,6 +11,7 @@ namespace Application.Domain.Repositories.Abstract
     {
         IQueryable<Group> GetAllGroups();
         Group GetGroupById(Guid id);
+        List<Student> GetStudentsInGroup(Guid groupId);
         void AddAndSaveGroup(Group newGroup);
         void DeleteGroup(Guid id);
     }

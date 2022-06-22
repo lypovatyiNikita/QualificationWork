@@ -1,1 +1,12 @@
-﻿
+﻿@model Application.Areas.Methodist.Model.GroupModel
+
+<form asp-area="Methodist" asp-controller="Group" asp-action="Save" method="post">
+    <input type="hidden" asp-for="Group.Id" />
+    <div asp-validation-summary="All"></div>
+    <div class="div-box">
+        <label asp-for="Group.Name"></label>
+        <input asp-for="Group.Name" />
+    </div>
+    @Html.ListBoxFor(x => x.SubjectsId, Model.Subjects, new { style = "width:200px" })
+    <input type="submit" value="Зберегти" />
+</form>

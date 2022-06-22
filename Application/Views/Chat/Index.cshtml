@@ -1,8 +1,16 @@
-﻿@model SelectList
+﻿@model List<ChatViewModel>
 <div id="chatroom"></div>
 <div id="inputForm">
-    <select asp-items="Model" id="id">
+    <select id="id">
         <option id="-1">Виберете чат</option>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            if (i == 0 || Model[i - 1].userType != Model[i].userType)
+            {
+                <optgroup label="@Model[i].userType"></optgroup>
+            }
+            <option value="@Model[i].SendUserID">@Model[i].UserName</option>
+        }
     </select>
     <input type="text" id="message" />
     <input type="button" id="sendBtn" value="Отправить" />
@@ -13,7 +21,7 @@
         .withUrl("/chat")
         .build();
 
-    hubConnection.on("Send", function (username ,message) {
+    hubConnection.on("Send", function (username, message) {
 
         let elem = document.createElement("p");
         var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

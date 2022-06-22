@@ -13,30 +13,35 @@
         </form>
     </div>
 }
+@if (User.IsInRole(AllRoles.StudentRole))
+{
+    <form asp-area="" asp-controller="Schedule" asp-action="Schedule" method="post">
+        <input type="hidden" asp-for="CurrentDateTime" />
+        @if (!Model.isInGroup)
+        {
+            <input type="hidden" asp-for="isInGroup" value="@true" />
+            <button type="submit">Показати розклад групи</button>
+        }
+        else
+        {
+            <input type="hidden" asp-for="isInGroup" value="@false" />
+            <button type="submit">Показати повний розклад</button>
+        }
+    </form>
+}
 <div>
     <form asp-area="" asp-controller="Schedule" asp-action="Schedule" method="post">
+        <input type="hidden" asp-for="isInGroup" />
         <input asp-for="CurrentDateTime">
         <span asp-validation-for="CurrentDateTime"></span>
         <button type="submit">Відкрити</button>
     </form>
 </div>
-<div style="
-        margin: 4px, 4px;
-        padding: 1px;
-        width: 100%;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-    ">
-    <h1>
-        @Model.Test
-    </h1>
-    <table>
-        <tr>
-            <th>
-                Розклад
-            </th>
-        </tr>
+<div>
+    <h2 align="center">
+        Розклад
+    </h2>
+    <table class="schedule">
         @for (int i = 0; i < 8; i++)
         {
             <tr>
@@ -58,6 +63,14 @@
                                 @if (Model.CurrentSchedules[j].Block.Group != null)
                                 {
                                     @Model.CurrentSchedules[j].Block.Group.Name<hr />
+                                }
+                                @if (Startup.IsMethodistModeNow)
+                                {
+                                    <form asp-area="Methodist" asp-controller="Schedule" asp-action="DeleteParaInSchedule">
+                                        <input type ="hidden" name="id" value="@Model.CurrentSchedules[j].Id"/>
+                                        <input type="hidden" name="data" value="@Model.CurrentDateTime" />
+                                        <button type="submit">Видалити</button>
+                                    </form>
                                 }
                             </div>
                         </td>

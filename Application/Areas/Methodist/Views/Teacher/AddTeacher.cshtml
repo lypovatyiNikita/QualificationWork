@@ -3,6 +3,7 @@
 <form asp-area="Methodist" asp-controller="Teacher" asp-action="Save" method="post">
     <input type="hidden" asp-for="Teacher.Id" />
     <input type="hidden" asp-for="Teacher.TeacherId" />
+    <input type="hidden" asp-for="Teacher.TeacherUser.Id" />
     <div asp-validation-summary="All"></div>
     <div class="div-box">
         <label asp-for="Teacher.TeacherUser.UserName"></label>
@@ -20,6 +21,6 @@
         <label asp-for="Teacher.TeacherUser.Surname"></label>
         <input asp-for="Teacher.TeacherUser.Surname" />
     </div>
-    @Html.ListBoxFor(x => x.Subjects, Model.SubjectsSelect, new { style = "width:200px" })
+    <select multiple="multiple" class="selectpicker form-control filter-selector" asp-for="Subjects" asp-items="Model.SubjectsSelect"></select>
     <input type="submit" value="Зберегти" />
 </form>

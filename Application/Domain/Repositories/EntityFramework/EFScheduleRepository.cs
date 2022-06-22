@@ -28,9 +28,19 @@ namespace Application.Domain.Repositories.EntityFramework
 			return AppDbContextRef.Schedule.Include(x => x.Block).Where(x => x.DateOfBlock == needDateTime);
 		}
 
+		public IQueryable<Schedule> GetAllSheduleByDateInGroup(DateTime needDateTime, Guid? groupId)
+		{
+			return GetAllSheduleByDate(needDateTime).Where(x => x.Block.GroupId == groupId);
+		}
+
 		public Schedule GetScheduleById(Guid ID)
 		{
 			return AppDbContextRef.Schedule.FirstOrDefault(x => x.Id == ID);
+		}
+
+		public Schedule GetScheduleByParams(Schedule schedule)
+		{
+			return AppDbContextRef.Schedule.Where(x => x.BlockId == schedule.BlockId).Where(x => x.Couple == schedule.Couple).FirstOrDefault(x => x.DateOfBlock==schedule.DateOfBlock);
 		}
 
 		public void AddAndSaveBlock(Schedule newSchedule)
@@ -47,6 +57,5 @@ namespace Application.Domain.Repositories.EntityFramework
 			AppDbContextRef.Schedule.Remove(new Schedule() { Id = id });
 			AppDbContextRef.SaveChanges();
 		}
-
 	}
 }

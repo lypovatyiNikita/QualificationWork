@@ -12,6 +12,7 @@ namespace Application.Domain.Repositories.Abstract
         IQueryable<Student> GetAllStudents();
         Student GetStudentById(Guid? id);
         Student GetStudentByUserId(string userId);
+        string GetPasswordByStudentId(Guid guid);
         void AddAndSaveStudent(Student newSchedule);
         void DeleteStudent(Guid id);
     }

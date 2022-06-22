@@ -711,7 +711,7 @@ table {
 	hr {
 		border: 0;
 		border-top: solid 2px #E7EAE8;
-		margin-top:1em;
+		margin-top: 1em;
 	}
 
 	&.default {
@@ -739,8 +739,16 @@ table {
 			color: #fff;
 		}
 	}
-}
 
+	&.schedule {
+		width: 100%;
+		margin: 4px, 4px;
+		padding: 1px;
+		overflow-x: auto;
+		overflow-y: hidden;
+		white-space: nowrap;
+	}
+}
 /* Box */
 
 	.box {

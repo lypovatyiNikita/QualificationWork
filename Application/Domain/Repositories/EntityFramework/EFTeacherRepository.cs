@@ -37,19 +37,11 @@ namespace Application.Domain.Repositories.EntityFramework
 
 		public void AddAndSaveTeacher(Teacher newTeacher)
 		{
-			try
-			{
-				universityUserRepositoryRef.AddAndSaveUser(newTeacher.TeacherUser);
-				if (!AppDbContextRef.Teachers.Any(x => x.Id == newTeacher.Id))
-					AppDbContextRef.Entry(newTeacher).State = EntityState.Added;
-				else
-					AppDbContextRef.Entry(newTeacher).State = EntityState.Modified;
-				AppDbContextRef.SaveChanges();
-			}
-			catch (Exception e)
-			{
-
-			}
+			if (!AppDbContextRef.Teachers.Any(x => x.Id == newTeacher.Id))
+				AppDbContextRef.Entry(newTeacher).State = EntityState.Added;
+			else
+				AppDbContextRef.Entry(newTeacher).State = EntityState.Modified;
+			AppDbContextRef.SaveChanges();
 		}
 
 		public void DeleteTeacher(Guid id)

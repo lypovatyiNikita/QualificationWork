@@ -45,7 +45,7 @@ namespace Application
 			services.AddTransient<IUniversityUserRepository, EFUniversityUserRepository>();
 			services.AddTransient<IGroupRepository, EFGroupRepository>();
 			services.AddTransient<IGroupSubjectRepository, EFGroupSubjectRepository>();
-			services.AddTransient<IUniversityUserRoleRepository, EFUniversityUserRoleRepository>();
+			services.AddScoped<IUniversityUserRoleRepository, EFUniversityUserRoleRepository>();
 			services.AddTransient<IRoleRepository, EFRoleRepository>();
 			services.AddTransient<DataManager>();
 

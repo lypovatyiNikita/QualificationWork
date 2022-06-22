@@ -1,0 +1,11 @@
+﻿@model Subject
+
+<form asp-area="Methodist" asp-controller="Subject" asp-action="Save" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All"></div>
+    <div class="div-box">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+    </div>
+    <input type="submit" value="Зберегти" />
+</form>

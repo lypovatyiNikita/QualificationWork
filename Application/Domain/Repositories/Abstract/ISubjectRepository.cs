@@ -11,5 +11,7 @@ namespace Application.Domain.Repositories.Abstract
     {
         IQueryable<Subject> GetAllSubjects();
         Subject GetSubjectById(Guid? id);
+        void AddAndSaveSubject(Subject newSubject);
+        void DeleteSubject(Guid subjectId);
     }
 }

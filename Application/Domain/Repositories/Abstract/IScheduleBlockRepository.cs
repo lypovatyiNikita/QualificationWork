@@ -10,6 +10,7 @@ namespace Application.Domain.Repositories.Abstract
     public interface IScheduleBlockRepository
     {
         IQueryable<ScheduleBlock> GetAllBlocks();
+        IQueryable<ScheduleBlock> GetAllBlocksInGroup(Guid? groupId);
         ScheduleBlock GetBlockById(Guid id);
         void AddAndSaveBlock(ScheduleBlock newBlock);
         void DeleteBlock(Guid id);

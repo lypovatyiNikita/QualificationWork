@@ -10,5 +10,15 @@ namespace Application.Models
     public class ChatViewModel
     {
         public string SendUserID;
+        public string userType;
+        public string UserName;
     }
+
+    public enum ChatUserType : int
+	{
+        None = 0,
+        Student = 1,
+        Teacher = 2,
+        Methodist = 3
+	}
 }

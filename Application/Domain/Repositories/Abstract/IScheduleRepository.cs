@@ -11,7 +11,9 @@ namespace Application.Domain.Repositories.Abstract
     {
         IQueryable<Schedule> GetAllSchedules();
         IQueryable<Schedule> GetAllSheduleByDate(DateTime needDateTime);
+        IQueryable<Schedule> GetAllSheduleByDateInGroup(DateTime needDateTime, Guid? groupId);
         Schedule GetScheduleById(Guid ID);
+        Schedule GetScheduleByParams(Schedule schedule);
         void AddAndSaveBlock(Schedule newSchedule);
         void DeleteBlock(Guid id);
     }

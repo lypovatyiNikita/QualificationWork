@@ -18,9 +18,9 @@ namespace Application.Models
         public Schedule[] CurrentSchedules { get; set; }
 
         public SelectList AllSheduleBlocks { get; set; }
-        
-        public string Test { get; set; }
 
-        public Guid Couple { get; set; }
+        public string DateInString { get; set; }
+
+        public bool isInGroup { get; set; }
     }
 }

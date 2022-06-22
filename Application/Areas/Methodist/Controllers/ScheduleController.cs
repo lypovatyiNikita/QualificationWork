@@ -32,6 +32,19 @@ namespace Application.Areas.Methodist.Controllers
 			dataManagerRef.ScheduleRepositoryRef.AddAndSaveBlock(newSchedule);
 			return ReturnBackToStandartSchedule(data);
 		}
+		public IActionResult DeleteParaInSchedule(Guid id, DateTime data)
+		{
+			//Schedule newSchedule = new Schedule()
+			//{
+			//	BlockId = paraID,
+			//	Couple = paraNumber,
+			//	DateOfBlock = data
+			//};
+			//Schedule deletedSchedule = dataManagerRef.ScheduleRepositoryRef.GetScheduleByParams(newSchedule);
+			if (id != default)
+				dataManagerRef.ScheduleRepositoryRef.DeleteBlock(id);
+			return ReturnBackToStandartSchedule(data);
+		}
 
 		private IActionResult ReturnBackToStandartSchedule(DateTime dateToBack)
 		{
@@ -69,7 +82,7 @@ namespace Application.Areas.Methodist.Controllers
 			if (teacherId != default)
 				scheduleBlockModel.BlockRef.TeacherId = teacherId;
 			if (groupId != default)
-				scheduleBlockModel.BlockRef.GroupId= groupId;
+				scheduleBlockModel.BlockRef.GroupId = groupId;
 
 			dataManagerRef.ScheduleBlockRepositoryRef.AddAndSaveBlock(scheduleBlockModel.BlockRef);
 			return Redirect("~/schedule");
